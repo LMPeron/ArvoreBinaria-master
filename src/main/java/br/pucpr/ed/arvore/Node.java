@@ -33,10 +33,19 @@ public class Node<T> {
         this.filhoDireito = filhoDireito;
     }
 
+    public int getQuantidadeFilhos() {
+        int quantidadeFilhos = 0;
+        if (filhoEsquerdo != null) {
+            quantidadeFilhos++;
+        }
+        if (filhoDireito != null) {
+            quantidadeFilhos++;
+        }
+        return quantidadeFilhos;
+    }
+
     @Override
     public String toString() {
-        return "Node{" +
-            "dados=" + dados +
-            '}';
+        return "Node{" + "dados=" + dados + '}';
     }
 }

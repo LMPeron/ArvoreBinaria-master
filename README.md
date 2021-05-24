@@ -13,13 +13,15 @@ Projeto apresentado nos dias 23, 29 e 30 de março de 2021 para os estudantes da
 **3)** AFI6: Implementar um método para imprimir os nós da árvore em uma travesia em pré-ordem.  
 **4)** AFI6: Implementar um método para imprimir os nós da árvore em uma travesia em pós-ordem.  
 **5)** AFI6: Implementar método para calcular quantidade de folhas em uma árvore.  
+
+
 **6)** AFI6: Indique se a árvore binária de busca com as seguintes entradas é balanceada ou não:      
-A. 53, 67, 64, 43, 42, 33  
-   Resposta:  
+A. 53, 67, 64, 43, 42, 33     
+   Resposta: Não
 B. 43, 49, 70, 26, 1, 99, 53, 37, 96, 83  
-   Resposta:  
+   Resposta: Não
 C. 90, 99, 41, 15, 96, 30, 82, 1, 69  
-   Resposta:  
+   Resposta: Sim
 **6)** Extra: Implementar a segunda abordagem de exclusão para o caso 3 explicado nas páginas 12 a 16 do slide (exclusão de nó com 2 filhos).
 
 

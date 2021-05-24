@@ -11,14 +11,30 @@ public class MainApp {
         intTree.adicionar(35);
         intTree.adicionar(98);
         intTree.adicionar(1);
+
+
+        System.out.println("ARVORE");
+        intTree.imprimirArvore();
+
+        System.out.println("QUANTIDADE DE FOLHAS: ");
+        System.out.print(intTree.contarFolhas(intTree.getRaiz()));
+
+
+
+
+
         Integer elemento = intTree.buscar(29);
         System.out.println("Elemento buscado: " + elemento);
-        System.out.println("Em ordem: ");
+
+        
+       System.out.println("Em ordem: ");
         intTree.percorrerEmOrdem();
+
         System.out.println("\nPré-ordem: ");
-        intTree.percorrerPreOrdem();
+        intTree.percorrerPreOrdem(intTree.getRaiz());
+
         System.out.println("\nPós-ordem: ");
-        intTree.percorrerPosOrdem();
+        intTree.percorrerPosOrdem(intTree.getRaiz());
 
         Pessoa pessoa = new Pessoa(12345678900L, "João das Neves");
         ArvoreBinaria<Pessoa> arvoreBinaria = new ArvoreBinaria<>(pessoa);

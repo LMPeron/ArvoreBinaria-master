@@ -1,31 +1,33 @@
 package br.pucpr.ed.arvore;
 
 public class ArvoreBinaria<T extends Comparable> {
+
     private Node<T> raiz;
 
-    public ArvoreBinaria(){
+    public ArvoreBinaria() {
 
     }
 
     public ArvoreBinaria(T dadosRaiz) {
-        if(dadosRaiz == null){
+        if (dadosRaiz == null) {
             throw new IllegalArgumentException("A raiz não pode nula!");
         }
         raiz = new Node<>(dadosRaiz);
     }
+
     public void adicionar(T dados) {
         Node<T> node = new Node<>(dados);
         raiz = adicionarRecursivamente(raiz, node);
     }
 
-    private Node<T> adicionarRecursivamente(Node<T> noAtual, Node<T> novoNo){
-        if(noAtual == null){
+    private Node<T> adicionarRecursivamente(Node<T> noAtual, Node<T> novoNo) {
+        if (noAtual == null) {
             return novoNo;
         }
         int resultado = novoNo.dados.compareTo(noAtual.dados);
-        if(resultado < 0){
+        if (resultado < 0) {
             noAtual.filhoEsquerdo = adicionarRecursivamente(noAtual.filhoEsquerdo, novoNo);
-        } else{
+        } else {
             noAtual.filhoDireito = adicionarRecursivamente(noAtual.filhoDireito, novoNo);
         }
         return noAtual;
@@ -33,21 +35,21 @@ public class ArvoreBinaria<T extends Comparable> {
 
     public T buscar(T dados) {
         Node<T> noEncontrado = buscarRecursivamente(raiz, dados);
-        if(noEncontrado != null){
+        if (noEncontrado != null) {
             return noEncontrado.dados;
-        } else{
+        } else {
             return null;
         }
     }
 
-    private Node<T> buscarRecursivamente(Node<T> noAtual, T dados){
-        if(noAtual == null){
+    private Node<T> buscarRecursivamente(Node<T> noAtual, T dados) {
+        if (noAtual == null) {
             return null;
         }
         int resultado = dados.compareTo(noAtual.dados);
-        if(resultado == 0){
+        if (resultado == 0) {
             return noAtual;
-        } else if(resultado < 0){
+        } else if (resultado < 0) {
             return buscarRecursivamente(noAtual.filhoEsquerdo, dados);
         } else {
             return buscarRecursivamente(noAtual.filhoDireito, dados);
@@ -55,14 +57,44 @@ public class ArvoreBinaria<T extends Comparable> {
     }
 
     public void excluir(T dados) {
-
+        raiz = excluirRecursivamente(raiz, dados);
     }
+
+    private Node<T> excluirRecursivamente(Node<T> noAtual, T dados) {
+        if (noAtual == null) {
+            return null;
+        }
+        int resultado = dados.compareTo(noAtual.dados);
+        if (resultado == 0) { // elemento encontrado
+            int quantidadeFilhos = noAtual.getQuantidadeFilhos();
+            switch (quantidadeFilhos) {
+                case 0: // caso 1 - nenhum filho
+                    return null;
+                case 1: // caso 2 - 1 filho
+                    return noAtual.filhoEsquerdo != null ? noAtual.filhoEsquerdo : noAtual.filhoDireito;
+                // if(noAtual.filhoEsquerdo != null){
+                // return noAtual.filhoEsquerdo;
+                // } else{
+                // return noAtual.filhoDireito;
+                // }
+                default: // caso 3 - 2 filhos
+                    adicionarRecursivamente(noAtual.filhoEsquerdo, noAtual.filhoDireito);
+                    return noAtual.filhoEsquerdo;
+            }
+        } else if (resultado < 0) {
+            noAtual.filhoEsquerdo = excluirRecursivamente(noAtual.filhoEsquerdo, dados);
+        } else {
+            noAtual.filhoDireito = excluirRecursivamente(noAtual.filhoDireito, dados);
+        }
+        return noAtual;
+    }
+
     public void percorrerEmOrdem() {
         percorrerEmOrdemRecursivamente(raiz);
     }
 
-    private void percorrerEmOrdemRecursivamente(Node<T> noAtual){
-        if(noAtual == null){
+    private void percorrerEmOrdemRecursivamente(Node<T> noAtual) {
+        if (noAtual == null) {
             return;
         }
         percorrerEmOrdemRecursivamente(noAtual.filhoEsquerdo);
@@ -70,16 +102,108 @@ public class ArvoreBinaria<T extends Comparable> {
         percorrerEmOrdemRecursivamente(noAtual.filhoDireito);
     }
 
-    public void percorrerPreOrdem() {
+    public void percorrerPreOrdem(Node<T> noAtual) {
+        if (noAtual == null)
+            return;
+
+        System.out.print(noAtual.dados + " -> ");
+        percorrerPreOrdem(noAtual.getFilhoEsquerdo());
+        percorrerPreOrdem(noAtual.getFilhoDireito());
+    }
+
+    public void percorrerPosOrdem(Node<T> noAtual) {
+        if (noAtual == null)
+            return;
+
+        percorrerPosOrdem(noAtual.getFilhoEsquerdo());
+        percorrerPosOrdem(noAtual.getFilhoDireito());
+        System.out.print(noAtual.dados + " -> ");
 
     }
 
-    public void percorrerPosOrdem() {
+    public T buscarMenorElemento() {
+        Node<T> menorElemento = buscarMenorElementoRecursivamente(raiz);
+        if (menorElemento != null) {
+            return menorElemento.dados;
+        } else {
+            return null;
+        }
+    }
 
+    private Node<T> buscarMenorElementoRecursivamente(Node<T> noAtual) {
+        if (noAtual == null) {
+            return null;
+        }
+        if (noAtual.filhoEsquerdo == null) {
+            return noAtual;
+        }
+        return buscarMenorElementoRecursivamente(noAtual.filhoEsquerdo);
+    }
+
+    public Integer calcularProfundidade() {
+        if (raiz == null) {
+            return null;
+        }
+        return Math.max(calcularProfundidadeRecursivamente(raiz.filhoEsquerdo, 0),
+                calcularProfundidadeRecursivamente(raiz.filhoDireito, 0));
+    }
+
+    private Integer calcularProfundidadeRecursivamente(Node<T> noAtual, Integer profundidadeAtual) {
+        if (noAtual == null) {
+            return profundidadeAtual;
+        }
+        Integer profundidadeEsquerda = calcularProfundidadeRecursivamente(noAtual.filhoEsquerdo, profundidadeAtual + 1);
+        Integer profundidadeDireita = calcularProfundidadeRecursivamente(noAtual.filhoDireito, profundidadeAtual + 1);
+        return Math.max(profundidadeEsquerda, profundidadeDireita);
     }
 
     public Node<T> getRaiz() {
         return raiz;
     }
-}
 
+    public void imprimirArvore() {
+        imprimirArvore(5);
+    }
+
+    public void imprimirArvore(int espacamento) {
+        System.out.println("╦");
+        imprimirArvoreRecursivamente(raiz, 0, espacamento);
+    }
+
+    public int contarFolhas(Node<T> noAtual) {
+        if (noAtual == null)
+            return 0;
+
+        if (noAtual.getQuantidadeFilhos() == 0) {
+            return 1;
+        } else {
+            return contarFolhas(noAtual.getFilhoEsquerdo()) + contarFolhas(noAtual.getFilhoDireito());
+        }
+    }
+
+    /**
+     * Contribuição do @gabrielpastori1
+     */
+    public void imprimirArvoreRecursivamente(Node<T> noAtual, int profundidade, int espacamento) {
+        System.out.print("║");
+        for (int i = 0; i < profundidade - 1; i++) {
+            System.out.print("│" + " ".repeat(espacamento));
+        }
+        if (profundidade != 0) {
+            if (noAtual.filhoDireito == null && noAtual.filhoEsquerdo == null) {
+                System.out.print("└");
+            } else {
+                System.out.print("├");
+            }
+            System.out.print("─".repeat(espacamento));
+        }
+
+        System.out.println(noAtual.dados);
+        if (noAtual.filhoEsquerdo != null) {
+            imprimirArvoreRecursivamente(noAtual.filhoEsquerdo, profundidade + 1, espacamento);
+        }
+        if (noAtual.filhoDireito != null) {
+            imprimirArvoreRecursivamente(noAtual.filhoDireito, profundidade + 1, espacamento);
+        }
+    }
+}
